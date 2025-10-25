@@ -1,9 +1,10 @@
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.dao.EventoDAO;
 import com.example.database.FabricaJDBC;
 import com.example.model.Evento;
+import com.example.service.EventoService;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,12 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class EventoDAOTest {
-  private EventoDAO dao;
   private String banco = "eventos";
 
   @BeforeEach
   void setUp() {
-    dao = new EventoDAO();
     criarTabelaSeNaoExistir();
     limparTabela();
   }
@@ -38,7 +37,8 @@ public class EventoDAOTest {
             + "nome TEXT,"
             + "descricao TEXT,"
             + "data DATE,"
-            + "local TEXT"
+            + "local TEXT,"
+            + "capacidadePessoas INTEGER"
             + ")";
     try (Connection conn = FabricaJDBC.conexao()) {
       PreparedStatement ps = conn.prepareStatement(sql);
@@ -65,10 +65,12 @@ public class EventoDAOTest {
     evento.setDescricao("descricao");
     evento.setData(LocalDate.now());
     evento.setLocal("rua1");
+    evento.setCapacidadePessoas(100);
 
-    dao.criarEvento(evento);
+    EventoService.adicionarEvento(evento.getNome(), evento.getDescricao(), evento.getData(),
+        evento.getLocal(), evento.getCapacidadePessoas());
 
-    List<Evento> lista = dao.listarEventos();
+    List<Evento> lista = EventoService.obterTodosEventos();
     assertFalse(lista.isEmpty(), "Lista não deve estar vazia");
     boolean existe = lista.stream().anyMatch(e -> evento.getNome().equals(e.getNome()));
     assertTrue(existe, "Evento criado deve existir na lista");
@@ -81,18 +83,18 @@ public class EventoDAOTest {
     evento.setDescricao("descricao2");
     evento.setData(LocalDate.now());
     evento.setLocal("rua2");
+    evento.setCapacidadePessoas(200);
 
-    dao.criarEvento(evento);
+    EventoService.adicionarEvento(evento.getNome(), evento.getDescricao(), evento.getData(),
+        evento.getLocal(), evento.getCapacidadePessoas());
 
-    List<Evento> lista = dao.listarEventos();
-    Evento eventoCriado = lista.stream()
-        .filter(e -> evento.getNome().equals(e.getNome()))
-        .findFirst()
-        .orElse(null);
+    List<Evento> lista = EventoService.obterTodosEventos();
+    Evento eventoCriado =
+        lista.stream().filter(e -> evento.getNome().equals(e.getNome())).findFirst().orElse(null);
 
     assertTrue(eventoCriado != null, "Evento criado deve existir na lista");
 
-    Evento eventoBuscado = dao.buscarEventoPorId(eventoCriado.getId());
+    Evento eventoBuscado = EventoService.obterEventoPorId(eventoCriado.getId());
     assertTrue(eventoBuscado != null, "Evento buscado não deve ser nulo");
     assertTrue(eventoBuscado.getNome().equals(evento.getNome()), "Nomes devem ser iguais");
   }
@@ -104,20 +106,20 @@ public class EventoDAOTest {
     evento.setDescricao("descricao3");
     evento.setData(LocalDate.now());
     evento.setLocal("rua3");
+    evento.setCapacidadePessoas(300);
 
-    dao.criarEvento(evento);
+    EventoService.adicionarEvento(evento.getNome(), evento.getDescricao(), evento.getData(),
+        evento.getLocal(), evento.getCapacidadePessoas());
 
-    List<Evento> lista = dao.listarEventos();
-    Evento eventoCriado = lista.stream()
-        .filter(e -> evento.getNome().equals(e.getNome()))
-        .findFirst()
-        .orElse(null);
+    List<Evento> lista = EventoService.obterTodosEventos();
+    Evento eventoCriado =
+        lista.stream().filter(e -> evento.getNome().equals(e.getNome())).findFirst().orElse(null);
 
     assertTrue(eventoCriado != null, "Evento criado deve existir na lista");
 
-    dao.deletarEvento(eventoCriado.getId());
+    EventoService.removerEvento(eventoCriado.getId());
 
-    Evento eventoDeletado = dao.buscarEventoPorId(eventoCriado.getId());
+    Evento eventoDeletado = EventoService.obterEventoPorId(eventoCriado.getId());
     assertTrue(eventoDeletado == null, "Evento deve ter sido deletado");
   }
 
@@ -128,23 +130,24 @@ public class EventoDAOTest {
     evento.setDescricao("descricao4");
     evento.setData(LocalDate.now());
     evento.setLocal("rua4");
+    evento.setCapacidadePessoas(400);
 
-    dao.criarEvento(evento);
+    EventoService.adicionarEvento(evento.getNome(), evento.getDescricao(), evento.getData(),
+        evento.getLocal(), evento.getCapacidadePessoas());
 
-    List<Evento> lista = dao.listarEventos();
-    Evento eventoCriado = lista.stream()
-        .filter(e -> evento.getNome().equals(e.getNome()))
-        .findFirst()
-        .orElse(null);
+    List<Evento> lista = EventoService.obterTodosEventos();
+    Evento eventoCriado =
+        lista.stream().filter(e -> evento.getNome().equals(e.getNome())).findFirst().orElse(null);
 
     assertTrue(eventoCriado != null, "Evento criado deve existir na lista");
 
     eventoCriado.setNome("Evento4Atualizado");
-    dao.atualizarEvento(eventoCriado);
+    EventoService.atualizarEvento(eventoCriado);
 
-    Evento eventoAtualizado = dao.buscarEventoPorId(eventoCriado.getId());
+    Evento eventoAtualizado = EventoService.obterEventoPorId(eventoCriado.getId());
     assertTrue(eventoAtualizado != null, "Evento atualizado não deve ser nulo");
-    assertTrue(eventoAtualizado.getNome().equals("Evento4Atualizado"),
+    assertTrue(
+        eventoAtualizado.getNome().equals("Evento4Atualizado"),
         "Nome do evento deve ter sido atualizado");
   }
 }

@@ -14,12 +14,15 @@ public class EventoDAO implements EventoDAOInterface {
   @Override
   public void criarEvento(Evento evento) {
     try (Connection conexao = FabricaJDBC.conexao()) {
-      String sql = "INSERT INTO eventos (nome, descricao, data, local) VALUES (?, ?, ?, ?)";
+      String sql =
+          "INSERT INTO eventos (nome, descricao, data, local, capacidadePessoas) VALUES (?, ?, ?,"
+              + " ?, ?)";
       PreparedStatement ps = conexao.prepareStatement(sql);
       ps.setString(1, evento.getNome());
       ps.setString(2, evento.getDescricao());
       ps.setDate(3, Date.valueOf(evento.getData()));
       ps.setString(4, evento.getLocal());
+      ps.setInt(5, evento.getCapacidadePessoas());
       ps.executeUpdate();
     } catch (SQLException e) {
       throw new RuntimeException("Erro ao criar evento: " + e.getMessage());
@@ -40,6 +43,7 @@ public class EventoDAO implements EventoDAOInterface {
         evento.setDescricao(rs.getString("descricao"));
         evento.setData(rs.getDate("data").toLocalDate());
         evento.setLocal(rs.getString("local"));
+        evento.setCapacidadePessoas(rs.getInt("capacidadePessoas"));
         eventos.add(evento);
       }
       return eventos;
@@ -62,6 +66,7 @@ public class EventoDAO implements EventoDAOInterface {
         evento.setDescricao(rs.getString("descricao"));
         evento.setData(rs.getDate("data").toLocalDate());
         evento.setLocal(rs.getString("local"));
+        evento.setCapacidadePessoas(rs.getInt("capacidadePessoas"));
         return evento;
       }
       return null;
@@ -73,13 +78,16 @@ public class EventoDAO implements EventoDAOInterface {
   @Override
   public void atualizarEvento(Evento evento) {
     try (Connection conexao = FabricaJDBC.conexao()) {
-      String sql = "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ? WHERE id = ?";
+      String sql =
+          "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ?, capacidadePessoas = ?"
+              + " WHERE id = ?";
       PreparedStatement ps = conexao.prepareStatement(sql);
       ps.setString(1, evento.getNome());
       ps.setString(2, evento.getDescricao());
       ps.setDate(3, Date.valueOf(evento.getData()));
       ps.setString(4, evento.getLocal());
-      ps.setInt(5, evento.getId());
+      ps.setInt(5, evento.getCapacidadePessoas());
+      ps.setInt(6, evento.getId());
       ps.executeUpdate();
     } catch (SQLException e) {
       throw new RuntimeException("Erro ao atualizar evento: " + e.getMessage());

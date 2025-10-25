@@ -8,16 +8,18 @@ public class Evento {
   public String descricao;
   public LocalDate data;
   public String local;
+  public int capacidadePessoas;
 
   public Evento() {
   }
-
-  public Evento(int id, String nome, String descricao, LocalDate data, String local) {
+  
+  public Evento(int id, String nome, String descricao, LocalDate data, String local, int capacidadePessoas) {
     this.id = id;
     this.nome = nome;
     this.descricao = descricao;
     this.data = data;
     this.local = local;
+    this.capacidadePessoas = capacidadePessoas;
   }
 
   public int getId() {
@@ -60,9 +62,17 @@ public class Evento {
     this.local = local;
   }
 
+  public int getCapacidadePessoas() {
+    return capacidadePessoas;
+  }
+
+  public void setCapacidadePessoas(int capacidadePessoas) {
+    this.capacidadePessoas = capacidadePessoas;
+  }
+
   @Override
   public String toString() {
     return "Evento [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", data=" + data + ", local=" + local
-        + "]";
+        + ", capacidadePessoas=" + capacidadePessoas + "]";
   }
 }
