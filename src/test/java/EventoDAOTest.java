@@ -136,8 +136,7 @@ public class EventoDAOTest {
         evento.getLocal(), evento.getCapacidadePessoas());
 
     List<Evento> lista = EventoService.obterTodosEventos();
-    Evento eventoCriado =
-        lista.stream().filter(e -> evento.getNome().equals(e.getNome())).findFirst().orElse(null);
+    Evento eventoCriado = lista.stream().filter(e -> evento.getNome().equals(e.getNome())).findFirst().orElse(null);
 
     assertTrue(eventoCriado != null, "Evento criado deve existir na lista");
 
@@ -149,5 +148,29 @@ public class EventoDAOTest {
     assertTrue(
         eventoAtualizado.getNome().equals("Evento4Atualizado"),
         "Nome do evento deve ter sido atualizado");
+  }
+  
+  @Test
+  void testCriarEventoComDadosInvalidos() {
+    try {
+      EventoService.adicionarEvento("", "descricao", LocalDate.now(), "local", 100);
+      assertTrue(false, "Deveria ter lançado IllegalArgumentException para nome vazio");
+    } catch (IllegalArgumentException e) {
+      assertTrue(true);
+    }
+
+    try {
+      EventoService.adicionarEvento("Nome", "descricao", LocalDate.now().minusDays(1), "local", 100);
+      assertTrue(false, "Deveria ter lançado IllegalArgumentException para data no passado");
+    } catch (IllegalArgumentException e) {
+      assertTrue(true);
+    }
+
+    try {
+      EventoService.adicionarEvento("Nome", "descricao", LocalDate.now(), "local", 0);
+      assertTrue(false, "Deveria ter lançado IllegalArgumentException para capacidadePessoas <= 0");
+    } catch (IllegalArgumentException e) {
+      assertTrue(true);
+    }
   }
 }

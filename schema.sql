@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS eventos (
     nome TEXT NOT NULL,
     descricao TEXT,
     data DATETIME NOT NULL,
-    local TEXT
+    local TEXT,
+    capacidadePessoas INTEGER NOT NULL
 );
