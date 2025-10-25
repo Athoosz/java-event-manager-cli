@@ -1,3 +1,4 @@
 # Ignorar pasta de build do Maven (usada pelo projeto)
 target/
 
+.vscode/
