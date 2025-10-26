@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.athoosz.utils;
 
 import java.util.Objects;
 import java.util.function.Consumer;

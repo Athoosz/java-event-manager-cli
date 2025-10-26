@@ -1,7 +1,7 @@
-package com.example.dao;
+package com.athoosz.dao;
 
-import com.example.database.FabricaJDBC;
-import com.example.model.Evento;
+import com.athoosz.database.FabricaJDBC;
+import com.athoosz.model.Evento;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;

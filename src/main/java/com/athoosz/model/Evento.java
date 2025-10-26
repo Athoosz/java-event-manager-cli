@@ -1,4 +1,4 @@
-package com.example.model;
+package com.athoosz.model;
 
 import java.time.LocalDate;
 

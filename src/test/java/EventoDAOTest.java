@@ -2,9 +2,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.database.FabricaJDBC;
-import com.example.model.Evento;
-import com.example.service.EventoService;
+import com.athoosz.database.FabricaJDBC;
+import com.athoosz.model.Evento;
+import com.athoosz.service.EventoService;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

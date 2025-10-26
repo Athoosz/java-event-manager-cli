@@ -1,9 +1,9 @@
-package com.example.dao;
+package com.athoosz.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.example.model.Evento;
+import com.athoosz.model.Evento;
 
 public interface EventoDAOInterface {
   void criarEvento(Evento evento);

@@ -1,6 +1,6 @@
-package com.example;
+package com.athoosz;
 
-import com.example.controller.EventoController;
+import com.athoosz.controller.EventoController;
 import java.util.Scanner;
 
 public class Main {

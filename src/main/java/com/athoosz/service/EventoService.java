@@ -1,8 +1,8 @@
-package com.example.service;
+package com.athoosz.service;
 
-import com.example.dao.EventoDAO;
-import com.example.model.Evento;
-import com.example.utils.ValueUtils;
+import com.athoosz.dao.EventoDAO;
+import com.athoosz.model.Evento;
+import com.athoosz.utils.ValueUtils;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
