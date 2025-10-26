@@ -1,6 +1,7 @@
 package com.example.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.model.Evento;
 
@@ -9,7 +10,7 @@ public interface EventoDAOInterface {
 
   List<Evento> listarEventos();
 
-  Evento buscarEventoPorId(int id);
+  Optional<Evento> buscarEventoPorId(int id);
 
   void atualizarEvento(Evento evento);
 

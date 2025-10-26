@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EventoDAO implements EventoDAOInterface {
 
@@ -53,7 +54,7 @@ public class EventoDAO implements EventoDAOInterface {
   }
 
   @Override
-  public Evento buscarEventoPorId(int id) {
+  public Optional<Evento> buscarEventoPorId(int id) {
     try (Connection conexao = FabricaJDBC.conexao()) {
       String sql = "SELECT * FROM eventos WHERE id = ?";
       PreparedStatement ps = conexao.prepareStatement(sql);
@@ -67,9 +68,9 @@ public class EventoDAO implements EventoDAOInterface {
         evento.setData(rs.getDate("data").toLocalDate());
         evento.setLocal(rs.getString("local"));
         evento.setCapacidadePessoas(rs.getInt("capacidadePessoas"));
-        return evento;
+        return Optional.of(evento);
       }
-      return null;
+      return Optional.empty();
     } catch (SQLException e) {
       throw new RuntimeException("Erro ao buscar evento por ID: " + e.getMessage());
     }
