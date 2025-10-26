@@ -1,7 +1,28 @@
 # Java Event Manager CLI
 
-Aplicação de linha de comando para gerenciar eventos (recurso: Evento) usando Java 17 e SQLite.
+**Java Event Manager CLI** é uma aplicação de linha de comando desenvolvida em Java 17, que permite gerenciar eventos de forma simples e eficiente utilizando um banco de dados SQLite.  
 
+Este projeto foi desenvolvido como parte de um exercício técnico para demonstrar habilidades em desenvolvimento de software, incluindo:
+
+- Estruturação de uma aplicação CLI (Console)
+- Implementação de operações CRUD (Create, Read, Update, Delete)
+- Uso de banco de dados relacional (SQLite)
+- Validação de dados e regras de negócio
+- Documentação
+
+---
+
+## 📑 Sumário
+- [1. Recurso escolhido](#1-recurso-escolhido-evento)
+- [2. Banco de Dados](#2-banco-de-dados-sqlite)
+- [3. Funcionalidades](#3-funcionalidades-da-aplicação-cli)
+- [4. Linguagem e Ferramentas](#4-linguagem-e-ferramentas)
+- [5. Compilação e Execução](#5-compilação-e-execução)
+- [6. Como usar](#6-como-usar-exemplos)
+- [7. Testes Unitários](#7-testes-unitários)
+- [8. Conteinerização com Docker](#8-conteinerização-com-docker)
+- [9. Estrutura de Arquivos](#9-estrutura-de-arquivos)
+- [10. Autor](#10-autor)
 ---
 
 ## 1. Recurso escolhido: Evento
@@ -22,7 +43,7 @@ Tipos variados incluídos: **string**, **integer** e **date**.
 
 **Arquivo:** `eventos.db`  
 Local: raiz do projeto  
-Acesso via classe `com.example.database.FabricaJDBC`
+Acesso via classe `com.athoosz.database.FabricaJDBC`
 
 ### Script SQL (`schema.sql`)
 ```sql
@@ -88,7 +109,7 @@ No menu interativo:
 
  -  Clique em “Run Java” (ou use Ctrl + F5)
 
- -  Certifique-se de selecionar a classe principal com.example.Main
+ -  Certifique-se de selecionar a classe principal com.athoosz.Main
 
  - Os testes podem ser executados clicando no ícone de ▶️ ao lado dos métodos de teste ou pela aba “Testing”.
 
@@ -105,7 +126,7 @@ mvn test
 mvn dependency:copy-dependencies package
 
 # Executar a aplicação (Windows)
-java -cp "target/classes;target/dependency/*" com.example.Main
+java -cp "target/classes;target/dependency/*" com.athoosz.Main
 ```
 
 > O banco SQLite (`eventos.db`) será criado automaticamente na primeira execução.
@@ -153,7 +174,56 @@ mvn test
 ```
 ---
 
-## 8. Estrutura de Arquivos
+---
+
+## 8. Conteinerização com Docker
+
+### O que é Docker?
+Docker é uma plataforma que permite empacotar uma aplicação e suas dependências em um “container”. Um container é um ambiente isolado e padronizado, que pode ser executado em qualquer máquina que tenha Docker instalado. Isso facilita a distribuição, execução e escalabilidade da aplicação, pois elimina problemas de configuração do ambiente.
+
+### Dockerfile explicado linha a linha
+```Dockerfile
+# Imagem base com Java 17
+FROM eclipse-temurin:17-jre
+
+# Diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia as classes compiladas e dependências
+COPY target/classes /app/classes
+COPY target/dependency /app/dependency
+
+# Copia o arquivo do banco de dados SQLite (persistente via volume)
+COPY schema.sql /app/
+
+# Comando para rodar a aplicação
+CMD ["java", "-cp", "classes:dependency/*", "com.athoosz.Main"]
+```
+- **FROM**: Usa uma imagem oficial do Java 17 (JRE) como base para o container.
+- **WORKDIR**: Define o diretório `/app` como local onde os comandos serão executados e arquivos serão armazenados.
+- **COPY**: Copia os arquivos compilados da aplicação (`classes`), dependências externas (`dependency`) e o script de criação do banco (`schema.sql`) para dentro do container.
+- **CMD**: Define o comando que será executado quando o container iniciar: roda a aplicação Java usando o classpath correto.
+
+### Passo a passo para rodar com Docker
+
+1. Compile o projeto e copie as dependências:
+  ```powershell
+  mvn clean compile dependency:copy-dependencies
+  ```
+
+2. Construa a imagem Docker:
+  ```powershell
+  docker build -t java-event-manager-cli .
+  ```
+
+3. Execute o container com persistência do banco:
+  ```powershell
+  docker run -it --rm -v ${PWD}/eventos.db:/app/eventos.db java-event-manager-cli
+  ```
+  - O banco de dados será salvo e reutilizado fora do container.
+
+
+## 9. Estrutura de Arquivos
 
 ```
 src/
@@ -178,3 +248,6 @@ README.md
 ```
 
 ---
+## 10. Autor
+Desenvolvido por **Athoosz**  
+💻 Projeto técnico desenvolvido como parte de um processo seletivo de estágio.
