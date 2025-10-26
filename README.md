@@ -13,16 +13,68 @@ Este projeto foi desenvolvido como parte de um exercício técnico para demonstr
 ---
 
 ## 📑 Sumário
+- [Tutorial: Instalação e Execução](#tutorial-instalação-e-execução)
 - [1. Recurso escolhido](#1-recurso-escolhido-evento)
 - [2. Banco de Dados](#2-banco-de-dados-sqlite)
 - [3. Funcionalidades](#3-funcionalidades-da-aplicação-cli)
 - [4. Linguagem e Ferramentas](#4-linguagem-e-ferramentas)
-- [5. Compilação e Execução](#5-compilação-e-execução)
-- [6. Como usar](#6-como-usar-exemplos)
-- [7. Testes Unitários](#7-testes-unitários)
-- [8. Conteinerização com Docker](#8-conteinerização-com-docker)
-- [9. Estrutura de Arquivos](#9-estrutura-de-arquivos)
-- [10. Autor](#10-autor)
+- [5. Como usar](#5-como-usar-exemplos)
+- [6. Testes Unitários](#6-testes-unitários)
+- [7. Conteinerização com Docker](#7-conteinerização-com-docker)
+- [8. Estrutura de Arquivos](#8-estrutura-de-arquivos)
+- [9. Autor](#9-autor)
+---
+
+## Tutorial: Instalação e Execução
+
+### 1. Clone o repositório
+
+No terminal:
+```bash
+git clone https://github.com/Athoosz/java-event-manager-cli.git
+cd java-event-manager-cli
+```
+
+### 2. Escolha como deseja rodar o projeto
+
+#### **A) Rodar com Java (Maven)**
+
+1. Instale o [JDK 17+](https://www.oracle.com/br/java/technologies/downloads/) e [Maven](https://maven.apache.org/download.cgi).
+
+2. Você pode executar a aplicação diretamente pelo Visual Studio Code:
+
+ -  Abra o arquivo Main.java
+
+ -  Clique em “Run Java” (ou use Ctrl + F5)
+
+ -  Certifique-se de selecionar a classe principal com.athoosz.Main
+
+ - Os testes podem ser executados clicando no ícone de ▶️ ao lado dos métodos de teste ou pela aba “Testing”.
+
+3. Ou no terminal, na raiz do projeto:
+
+```bash
+# Compilar
+mvn compile
+
+# Executar testes
+mvn test
+
+# Empacotar dependências e classes
+mvn dependency:copy-dependencies package
+
+# Executar a aplicação (Windows)
+java -cp "target/classes;target/dependency/*" com.athoosz.Main
+```
+
+> O banco SQLite (`eventos.db`) será criado automaticamente na primeira execução.
+
+---
+
+#### **B) Rodar com Docker**
+
+> Para instruções detalhadas sobre execução com Docker, consulte a seção [8. Conteinerização com Docker](#8-conteinerização-com-docker).
+
 ---
 
 ## 1. Recurso escolhido: Evento
@@ -88,52 +140,7 @@ No menu interativo:
 
 ---
 
-## 5. Compilação e Execução
-
-1. Instale **JDK 17** e **Maven**.  
-
-- Recursos para instalação:
-- JDK 17 Ou superior::
-  - Página de downloads : https://www.oracle.com/br/java/technologies/downloads/
-  - Documentação oficial Java SE 17 (Oracle): https://docs.oracle.com/en/java/javase/17/
-  - Vídeos-tutoriais (busca no YouTube): https://www.youtube.com/results?search_query=install+jdk+17+windows
-
-- Apache Maven:
-  - Página de download: https://maven.apache.org/download.cgi
-  - Guia de instalação: https://maven.apache.org/install.html
-  - Vídeos-tutoriais (busca no YouTube): https://www.youtube.com/results?search_query=install+apache+maven+windows
-
-2. Você pode executar a aplicação diretamente pelo Visual Studio Code:
-
- -  Abra o arquivo Main.java
-
- -  Clique em “Run Java” (ou use Ctrl + F5)
-
- -  Certifique-se de selecionar a classe principal com.athoosz.Main
-
- - Os testes podem ser executados clicando no ícone de ▶️ ao lado dos métodos de teste ou pela aba “Testing”.
-
-3. Ou no terminal, na raiz do projeto:
-
-```bash
-# Compilar
-mvn compile
-
-# Executar testes
-mvn test
-
-# Empacotar dependências e classes
-mvn dependency:copy-dependencies package
-
-# Executar a aplicação (Windows)
-java -cp "target/classes;target/dependency/*" com.athoosz.Main
-```
-
-> O banco SQLite (`eventos.db`) será criado automaticamente na primeira execução.
-
----
-
-## 6. Como usar (exemplos)
+## 5. Como usar (exemplos)
 
 Ao iniciar a aplicação, um menu será exibido.
 
@@ -159,7 +166,7 @@ Ao iniciar a aplicação, um menu será exibido.
 
 ---
 
-## 7. Testes Unitários
+## 6. Testes Unitários
 
 Arquivo: `src/test/java/EventoDAOTest.java`
 
@@ -176,54 +183,53 @@ mvn test
 
 ---
 
-## 8. Conteinerização com Docker
+## 7. Conteinerização com Docker
 
 ### O que é Docker?
 Docker é uma plataforma que permite empacotar uma aplicação e suas dependências em um “container”. Um container é um ambiente isolado e padronizado, que pode ser executado em qualquer máquina que tenha Docker instalado. Isso facilita a distribuição, execução e escalabilidade da aplicação, pois elimina problemas de configuração do ambiente.
 
 ### Dockerfile explicado linha a linha
 ```Dockerfile
-# Imagem base com Java 17
-FROM eclipse-temurin:17-jre
+# Imagem base com Maven e Java 17
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
 # Diretório de trabalho dentro do container
 WORKDIR /app
+COPY . /app
 
-# Copia as classes compiladas e dependências
-COPY target/classes /app/classes
-COPY target/dependency /app/dependency
+# Compila o projeto e copia dependências
+RUN mvn clean compile dependency:copy-dependencies package
 
-# Copia o arquivo do banco de dados SQLite (persistente via volume)
-COPY schema.sql /app/
+# Imagem final apenas com JRE
+FROM eclipse-temurin:17-jre
+WORKDIR /app
 
-# Comando para rodar a aplicação
+# Copia classes e dependências do estágio de build
+COPY --from=build /app/target/classes /app/classes
+COPY --from=build /app/target/dependency /app/dependency
+COPY --from=build /app/schema.sql /app/
+
 CMD ["java", "-cp", "classes:dependency/*", "com.athoosz.Main"]
 ```
 - **FROM**: Usa uma imagem oficial do Java 17 (JRE) como base para o container.
 - **WORKDIR**: Define o diretório `/app` como local onde os comandos serão executados e arquivos serão armazenados.
+- **RUN**: Executa comandos dentro do container. Aqui, compila o projeto Java e copia as dependências necessárias.
 - **COPY**: Copia os arquivos compilados da aplicação (`classes`), dependências externas (`dependency`) e o script de criação do banco (`schema.sql`) para dentro do container.
 - **CMD**: Define o comando que será executado quando o container iniciar: roda a aplicação Java usando o classpath correto.
 
 ### Passo a passo para rodar com Docker
 
-1. Compile o projeto e copie as dependências:
-  ```powershell
-  mvn clean compile dependency:copy-dependencies
-  ```
+1. Construa a imagem Docker (o build será feito dentro do container):
+   ```bash
+   docker build -t java-event-manager-cli .
+   ```
 
-2. Construa a imagem Docker:
-  ```powershell
-  docker build -t java-event-manager-cli .
-  ```
+2. Execute o container:
+   ```bash
+  docker run -it --rm java-event-manager-cli
+   ```
 
-3. Execute o container com persistência do banco:
-  ```powershell
-  docker run -it --rm -v ${PWD}/eventos.db:/app/eventos.db java-event-manager-cli
-  ```
-  - O banco de dados será salvo e reutilizado fora do container.
-
-
-## 9. Estrutura de Arquivos
+## 8. Estrutura de Arquivos
 
 ```
 src/
@@ -248,6 +254,6 @@ README.md
 ```
 
 ---
-## 10. Autor
+## 9. Autor
 Desenvolvido por **Athoosz**  
 💻 Projeto técnico desenvolvido como parte de um processo seletivo de estágio.

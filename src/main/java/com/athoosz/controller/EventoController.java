@@ -9,44 +9,43 @@ public class EventoController {
   private static Scanner sc = new Scanner(System.in);
 
   public static void menu() {
-    int opcao;
-    System.out.println("Menu:");
-    System.out.println("1. Criar Evento");
-    System.out.println("2. Listar Eventos");
-    System.out.println("3. Buscar Evento Por ID");
-    System.out.println("4. Atualizar Evento");
-    System.out.println("5. Deletar Evento");
-    System.out.println("0. Sair");
-    System.out.println("Digite a opçao que deseja: ");
+    while (true) {
+      int opcao;
+      System.out.println("Menu:");
+      System.out.println("1. Criar Evento");
+      System.out.println("2. Listar Eventos");
+      System.out.println("3. Buscar Evento Por ID");
+      System.out.println("4. Atualizar Evento");
+      System.out.println("5. Deletar Evento");
+      System.out.println("0. Sair");
+      System.out.println("Digite a opçao que deseja: ");
 
-    opcao = sc.nextInt();
-    sc.nextLine();
+      opcao = sc.nextInt();
+      sc.nextLine();
 
-    switch (opcao) {
-      case 1:
-        criarEvento();
-        break;
-      case 2:
-        listarEventos();
-        break;
-      case 3:
-        buscarEventoPorId();
-        break;
-      case 4:
-        atualizarEvento();
-        break;
-      case 5:
-        deletarEvento();
-        break;
-      case 0:
-        System.out.println("Saindo...");
-        break;
-      default:
-        System.out.println("Opção inválida");
-        break;
-    }
-    while (opcao != 0) {
-      menu();
+      switch (opcao) {
+        case 1:
+          criarEvento();
+          break;
+        case 2:
+          listarEventos();
+          break;
+        case 3:
+          buscarEventoPorId();
+          break;
+        case 4:
+          atualizarEvento();
+          break;
+        case 5:
+          deletarEvento();
+          break;
+        case 0:
+          System.out.println("Saindo...");
+          return;
+        default:
+          System.out.println("Opção inválida");
+          break;
+      }
     }
   }
 
