@@ -10,3 +10,4 @@ eventos.db
 
 # Arquivo de log gerado pelo sistema de logs
 eventos.log
+eventos.log.lck

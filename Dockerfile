@@ -15,5 +15,6 @@ WORKDIR /app
 COPY --from=build /app/target/classes /app/classes
 COPY --from=build /app/target/dependency /app/dependency
 COPY --from=build /app/schema.sql /app/
+COPY --from=build /app/logging.properties /app/logging.properties
 
 CMD ["java", "-cp", "classes:dependency/*", "com.athoosz.Main"]

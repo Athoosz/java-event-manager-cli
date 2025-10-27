@@ -3,6 +3,7 @@ package com.athoosz.controller;
 import com.athoosz.model.Evento;
 import com.athoosz.service.EventoService;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ public class EventoController {
   public static void menu() {
     while (true) {
       int opcao;
+      System.out.println("\n===============================");
       System.out.println("Menu:");
       System.out.println("1. Criar Evento");
       System.out.println("2. Listar Eventos");
@@ -60,8 +62,21 @@ public class EventoController {
       if (descricao != null && descricao.isBlank()) {
         descricao = null;
       }
-      System.out.println("Digite a data do evento (yyyy-mm-dd) (Campo Obrigatorio): ");
-      LocalDate data = LocalDate.parse(sc.nextLine());
+      LocalDate data = null;
+      while (true) {
+        System.out.println("Digite a data do evento (yyyy-mm-dd) (Campo Obrigatorio): ");
+        String dataInput = sc.nextLine();
+        if (dataInput == null || dataInput.isBlank()) {
+          System.out.println("Data é obrigatória. Informe no formato yyyy-mm-dd.");
+          continue;
+        }
+        try {
+          data = LocalDate.parse(dataInput);
+          break;
+        } catch (DateTimeParseException e) {
+          System.out.println("Data inválida. Informe no formato yyyy-mm-dd.");
+        }
+      }
       System.out.println(
           "Digite o local do evento (Campo Opcional, Digite Enter para deixar em branco): ");
       String local = sc.nextLine();
@@ -128,11 +143,21 @@ public class EventoController {
       System.out.println("Digite a nova descrição do evento (Digite Enter para manter a mesma): ");
       String descricao = sc.nextLine();
 
-      System.out.println(
-          "Digite a nova data do evento (yyyy-mm-dd) (Digite Enter para manter a mesma): ");
-      String dataInput = sc.nextLine();
-      LocalDate data =
-          dataInput != null && !dataInput.isBlank() ? LocalDate.parse(dataInput) : null;
+     LocalDate data = null;
+      while (true) {
+        System.out.println("Digite a data do evento (yyyy-mm-dd) (Campo Obrigatorio): ");
+        String dataInput = sc.nextLine();
+        if (dataInput == null || dataInput.isBlank()) {
+          System.out.println("Data é obrigatória. Informe no formato yyyy-mm-dd.");
+          continue;
+        }
+        try {
+          data = LocalDate.parse(dataInput);
+          break;
+        } catch (DateTimeParseException e) {
+          System.out.println("Data inválida. Informe no formato yyyy-mm-dd.");
+        }
+      }
 
       System.out.println("Digite o novo local do evento (Digite Enter para manter o mesmo): ");
       String local = sc.nextLine();

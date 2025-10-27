@@ -194,6 +194,16 @@ public class EventoDAOTest {
   }
 
   @Test
+  void testCriarEventoComDataNula() {
+    try {
+      EventoService.adicionarEvento("Nome", "descricao", null, "local", 100);
+      assertTrue(false, "Deveria ter lançado IllegalArgumentException para data nula");
+    } catch (IllegalArgumentException e) {
+      assertTrue(true);
+    }
+  }
+
+  @Test
   void testNaoAceitaFloatParaCapacidadePessoas() {
     try {
       float capacidadeFloat = 10.5f;
