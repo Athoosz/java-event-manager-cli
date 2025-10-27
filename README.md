@@ -263,6 +263,7 @@ schema.sql
 README.md
 .gitignore
 dockerfile
+logging.properties
 ```
 ---
 
