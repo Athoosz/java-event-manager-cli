@@ -24,7 +24,8 @@ Este projeto foi desenvolvido como parte de um exercício técnico para demonstr
 - [5. Testes Unitários](#5-testes-unitários)
 - [6. Conteinerização com Docker](#6-conteinerização-com-docker)
 - [7. Estrutura de Arquivos](#7-estrutura-de-arquivos)
-- [8. Autor](#8-autor)
+- [8. Logs da Aplicação](#8-logs-da-aplicação)
+- [9. Autor](#9-autor)
 ---
 
 ## Linguagem e Ferramentas do Projeto
@@ -263,8 +264,25 @@ README.md
 .gitignore
 dockerfile
 ```
+---
+
+
+## 8. Logs da Aplicação
+
+O projeto utiliza o sistema de logs padrão do Java (`java.util.logging`). Os logs são gravados no arquivo `eventos.log` na raiz do projeto, conforme configurado em `logging.properties`.
+
+- **Arquivo de configuração:** `logging.properties`
+- **Arquivo de log gerado:** `eventos.log`
+
+Exemplo de configuração (`logging.properties`):
+```properties
+handlers= java.util.logging.FileHandler
+java.util.logging.FileHandler.pattern = eventos.log
+java.util.logging.FileHandler.append = true
+.level = INFO
+```
 
 ---
-## 8. Autor
+## 9. Autor
 Desenvolvido por **Athoosz**  
 💻 Projeto técnico desenvolvido como parte de um processo seletivo de estágio.

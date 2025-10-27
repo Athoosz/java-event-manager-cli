@@ -7,3 +7,6 @@ target/
 
 # Banco de dados SQLite
 eventos.db
+
+# Arquivo de log gerado pelo sistema de logs
+eventos.log

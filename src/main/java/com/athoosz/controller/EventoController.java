@@ -4,8 +4,10 @@ import com.athoosz.model.Evento;
 import com.athoosz.service.EventoService;
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class EventoController {
+  private static final Logger logger = Logger.getLogger(EventoController.class.getName());
   private static Scanner sc = new Scanner(System.in);
 
   public static void menu() {
@@ -22,7 +24,6 @@ public class EventoController {
 
       opcao = sc.nextInt();
       sc.nextLine();
-
       switch (opcao) {
         case 1:
           criarEvento();
@@ -85,6 +86,7 @@ public class EventoController {
 
       EventoService.adicionarEvento(nome, descricao, data, local, capacidadePessoas);
     } catch (IllegalArgumentException e) {
+      logger.severe("Erro ao criar evento: " + e.getMessage());
       System.out.println(e.getMessage());
     }
   }
@@ -94,6 +96,7 @@ public class EventoController {
       System.out.println("Eventos cadastrados: ");
       EventoService.listarEventos();
     } catch (Exception e) {
+      logger.warning("Erro ao listar eventos: " + e.getMessage());
       System.out.println(e.getMessage());
     }
   }
@@ -106,6 +109,7 @@ public class EventoController {
       Evento evento = EventoService.obterEventoPorId(id);
       System.out.println(evento);
     } catch (Exception e) {
+      logger.warning("Erro ao buscar evento por ID: " + e.getMessage());
       System.out.println(e.getMessage());
     }
   }
@@ -156,6 +160,7 @@ public class EventoController {
       EventoService.atualizarEvento(eventoFromDB, nome, descricao, data, local, capacidadePessoas);
       System.out.println("Evento atualizado com sucesso!");
     } catch (IllegalArgumentException e) {
+      logger.warning("Erro ao atualizar evento: " + e.getMessage());
       System.out.println(e.getMessage());
     }
   }
@@ -168,8 +173,10 @@ public class EventoController {
       EventoService.removerEvento(id);
       System.out.println("Evento deletado com sucesso!");
     } catch (IllegalArgumentException e) {
+      logger.warning("Erro ao deletar evento: " + e.getMessage());
       System.out.println("Erro: " + e.getMessage());
     } catch (Exception e) {
+      logger.severe("Erro inesperado ao deletar evento: " + e.getMessage());
       System.out.println("Erro inesperado: " + e.getMessage());
     }
   }
