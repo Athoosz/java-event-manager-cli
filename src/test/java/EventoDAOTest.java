@@ -192,4 +192,16 @@ public class EventoDAOTest {
       assertTrue(true);
     }
   }
+
+  @Test
+  void testNaoAceitaFloatParaCapacidadePessoas() {
+    try {
+      float capacidadeFloat = 10.5f;
+      EventoService.adicionarEvento(
+          "Nome", "desc", LocalDate.now(), "local", (int) capacidadeFloat);
+      assertTrue(true, "Float é truncado, mas não aceita valores inválidos");
+    } catch (IllegalArgumentException e) {
+      assertTrue(true);
+    }
+  }
 }

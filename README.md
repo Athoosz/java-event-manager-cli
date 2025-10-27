@@ -10,6 +10,8 @@ Este projeto foi desenvolvido como parte de um exercício técnico para demonstr
 - Validação de dados e regras de negócio
 - Documentação
 
+> O projeto adota uma arquitetura em camadas simples, inspirada no padrão MVC, com camadas de model (entidades), DAO (Data Access Object), service para lógica de negócio e controller para gerenciar a interação com o usuário via terminal.
+
 ---
 
 ## 📑 Sumário
@@ -237,6 +239,8 @@ CMD ["java", "-cp", "classes:dependency/*", "com.athoosz.Main"]
 
 ## 7. Estrutura de Arquivos
 
+O projeto possui a seguinte estrutura de diretórios e arquivos:
+
 ```
 src/
  ├── main/java/com/example/
@@ -257,6 +261,7 @@ pom.xml
 schema.sql
 README.md
 .gitignore
+dockerfile
 ```
 
 ---

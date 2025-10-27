@@ -67,9 +67,21 @@ public class EventoController {
       if (local != null && local.isBlank()) {
         local = null;
       }
-      System.out.println("Digite a capacidade de pessoas (Campo Obrigatorio): ");
-      int capacidadePessoas = sc.nextInt();
-      sc.nextLine();
+      int capacidadePessoas;
+      while (true) {
+        System.out.println(
+            "Digite a capacidade de pessoas (Campo Obrigatorio, apenas número inteiro): ");
+        String input = sc.nextLine();
+        try {
+          if (input.contains(".") || input.contains(",")) {
+            throw new NumberFormatException();
+          }
+          capacidadePessoas = Integer.parseInt(input);
+          break;
+        } catch (NumberFormatException e) {
+          System.out.println("Valor inválido! Informe apenas números inteiros.");
+        }
+      }
 
       EventoService.adicionarEvento(nome, descricao, data, local, capacidadePessoas);
     } catch (IllegalArgumentException e) {
@@ -121,13 +133,25 @@ public class EventoController {
       System.out.println("Digite o novo local do evento (Digite Enter para manter o mesmo): ");
       String local = sc.nextLine();
 
-      System.out.println(
-          "Digite a nova capacidade de pessoas (Digite Enter para manter a mesma): ");
-      String capacidadePessoasInput = sc.nextLine();
-      Integer capacidadePessoas =
-          capacidadePessoasInput != null && !capacidadePessoasInput.isBlank()
-              ? Integer.parseInt(capacidadePessoasInput)
-              : null;
+      Integer capacidadePessoas = null;
+      while (true) {
+        System.out.println(
+            "Digite a nova capacidade de pessoas (Digite Enter para manter a mesma, apenas número"
+                + " inteiro): ");
+        String capacidadePessoasInput = sc.nextLine();
+        if (capacidadePessoasInput == null || capacidadePessoasInput.isBlank()) {
+          break;
+        }
+        try {
+          if (capacidadePessoasInput.contains(".") || capacidadePessoasInput.contains(",")) {
+            throw new NumberFormatException();
+          }
+          capacidadePessoas = Integer.parseInt(capacidadePessoasInput);
+          break;
+        } catch (NumberFormatException e) {
+          System.out.println("Valor inválido! Informe apenas números inteiros.");
+        }
+      }
 
       EventoService.atualizarEvento(eventoFromDB, nome, descricao, data, local, capacidadePessoas);
       System.out.println("Evento atualizado com sucesso!");
