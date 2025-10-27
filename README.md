@@ -13,17 +13,27 @@ Este projeto foi desenvolvido como parte de um exercício técnico para demonstr
 ---
 
 ## 📑 Sumário
+- [Linguagem e Ferramentas do Projeto](#linguagem-e-ferramentas-do-projeto)
 - [Tutorial: Instalação e Execução](#tutorial-instalação-e-execução)
 - [1. Recurso escolhido](#1-recurso-escolhido-evento)
 - [2. Banco de Dados](#2-banco-de-dados-sqlite)
 - [3. Funcionalidades](#3-funcionalidades-da-aplicação-cli)
-- [4. Linguagem e Ferramentas](#4-linguagem-e-ferramentas)
-- [5. Como usar](#5-como-usar-exemplos)
-- [6. Testes Unitários](#6-testes-unitários)
-- [7. Conteinerização com Docker](#7-conteinerização-com-docker)
-- [8. Estrutura de Arquivos](#8-estrutura-de-arquivos)
-- [9. Autor](#9-autor)
+- [4. Como usar](#4-como-usar-exemplos)
+- [5. Testes Unitários](#5-testes-unitários)
+- [6. Conteinerização com Docker](#6-conteinerização-com-docker)
+- [7. Estrutura de Arquivos](#7-estrutura-de-arquivos)
+- [8. Autor](#8-autor)
 ---
+
+## Linguagem e Ferramentas do Projeto
+
+Antes de executar o projeto, certifique-se de ter instalado:
+
+- ☕ **Java 17+**
+- 🧱 **Maven 3.8+**
+- 🗃️ **SQLite** (opcional — o banco é criado automaticamente, mas útil para inspecionar os dados)
+- 🐳 **Docker** (opcional, apenas se for rodar via container)
+- 💻 **Git** (para clonar o repositório)
 
 ## Tutorial: Instalação e Execução
 
@@ -39,19 +49,11 @@ cd java-event-manager-cli
 
 #### **A) Rodar com Java (Maven)**
 
+> Requisitos ☕ **Java 17** e 🧱 **Maven**
+
 1. Instale o [JDK 17+](https://www.oracle.com/br/java/technologies/downloads/) e [Maven](https://maven.apache.org/download.cgi).
 
-2. Você pode executar a aplicação diretamente pelo Visual Studio Code:
-
- -  Abra o arquivo Main.java
-
- -  Clique em “Run Java” (ou use Ctrl + F5)
-
- -  Certifique-se de selecionar a classe principal com.athoosz.Main
-
- - Os testes podem ser executados clicando no ícone de ▶️ ao lado dos métodos de teste ou pela aba “Testing”.
-
-3. Ou no terminal, na raiz do projeto:
+2. No terminal, na raiz do projeto:
 
 ```bash
 # Compilar
@@ -66,6 +68,16 @@ mvn dependency:copy-dependencies package
 # Executar a aplicação (Windows)
 java -cp "target/classes;target/dependency/*" com.athoosz.Main
 ```
+
+3. Você tambem pode executar a aplicação diretamente pelo Visual Studio Code:
+
+ -  Abra o arquivo Main.java
+
+ -  Clique em “Run Java” (ou use Ctrl + F5)
+
+ -  Certifique-se de selecionar a classe principal com.athoosz.Main
+
+ - Os testes podem ser executados clicando no ícone de ▶️ ao lado dos métodos de teste ou pela aba “Testing”.
 
 > O banco SQLite (`eventos.db`) será criado automaticamente na primeira execução.
 
@@ -131,16 +143,7 @@ No menu interativo:
 
 ---
 
-## 4. Linguagem e Ferramentas
-
-- ☕ **Java 17**
-- 🧱 **Maven**
-- 🗃️ **SQLite (sqlite-jdbc)**
-- 🧪 **JUnit 5** para testes
-
----
-
-## 5. Como usar (exemplos)
+## 4. Como usar (exemplos)
 
 Ao iniciar a aplicação, um menu será exibido.
 
@@ -166,7 +169,7 @@ Ao iniciar a aplicação, um menu será exibido.
 
 ---
 
-## 6. Testes Unitários
+## 5. Testes Unitários
 
 Arquivo: `src/test/java/EventoDAOTest.java`
 
@@ -181,9 +184,8 @@ mvn test
 ```
 ---
 
----
 
-## 7. Conteinerização com Docker
+## 6. Conteinerização com Docker
 
 ### O que é Docker?
 Docker é uma plataforma que permite empacotar uma aplicação e suas dependências em um “container”. Um container é um ambiente isolado e padronizado, que pode ser executado em qualquer máquina que tenha Docker instalado. Isso facilita a distribuição, execução e escalabilidade da aplicação, pois elimina problemas de configuração do ambiente.
@@ -219,17 +221,21 @@ CMD ["java", "-cp", "classes:dependency/*", "com.athoosz.Main"]
 
 ### Passo a passo para rodar com Docker
 
-1. Construa a imagem Docker (o build será feito dentro do container):
+> 1. Construa a imagem Docker (o build será feito dentro do container):
    ```bash
    docker build -t java-event-manager-cli .
    ```
 
-2. Execute o container:
-   ```bash
+> 2. Execute o container:
+```bash
   docker run -it --rm java-event-manager-cli
    ```
 
-## 8. Estrutura de Arquivos
+
+
+---
+
+## 7. Estrutura de Arquivos
 
 ```
 src/
@@ -254,6 +260,6 @@ README.md
 ```
 
 ---
-## 9. Autor
+## 8. Autor
 Desenvolvido por **Athoosz**  
 💻 Projeto técnico desenvolvido como parte de um processo seletivo de estágio.
