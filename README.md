@@ -88,7 +88,7 @@ java -cp "target/classes;target/dependency/*" com.athoosz.Main
 
 #### **B) Rodar com Docker**
 
-> Para instruções detalhadas sobre execução com Docker, consulte a seção [8. Conteinerização com Docker](#8-conteinerização-com-docker).
+> Para instruções detalhadas sobre execução com Docker, consulte a seção [6. Conteinerização com Docker](#6-conteinerização-com-docker)
 
 ---
 
